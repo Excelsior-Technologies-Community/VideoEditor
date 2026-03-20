@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand -->
+    <color name="accent">#FF6B6B</color>
+    <color name="accent_dark">#E05555</color>
+
+    <!-- Backgrounds -->
+    <color name="bg_dark">#0F0F0F</color>
+    <color name="bg_surface">#1A1A1A</color>
+    <color name="bg_card">#242424</color>
+
+    <!-- Text -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#AAAAAA</color>
+
+    <!-- Status -->
+    <color name="error">#CF6679</color>
+
+    <!-- Nav item -->
+    <color name="nav_item_selected">#FF6B6B</color>
+    <color name="nav_item_unselected">#777777</color>
+</resources>

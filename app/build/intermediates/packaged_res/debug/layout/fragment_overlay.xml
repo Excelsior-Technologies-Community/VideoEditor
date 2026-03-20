@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Text input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_text"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxStrokeColor="@color/accent"
+            app:hintTextColor="@color/text_secondary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTextInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_primary"
+                android:inputType="text"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Font size slider -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="@string/font_size"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+            <SeekBar
+                android:id="@+id/seekFontSize"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:progressTint="@color/accent"
+                android:thumbTint="@color/accent" />
+        </LinearLayout>
+
+        <!-- Color picker row -->
+        <RadioGroup
+            android:id="@+id/rgTextColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:gravity="center">
+
+            <RadioButton
+                android:id="@+id/rbWhite"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:button="@null"
+                android:background="@drawable/selector_color_white"
+                android:checked="true"
+                android:layout_margin="4dp" />
+
+            <RadioButton
+                android:id="@+id/rbBlack"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:button="@null"
+                android:background="@drawable/selector_color_black"
+                android:layout_margin="4dp" />
+
+            <RadioButton
+                android:id="@+id/rbYellow"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:button="@null"
+                android:background="@drawable/selector_color_yellow"
+                android:layout_margin="4dp" />
+
+            <RadioButton
+                android:id="@+id/rbRed"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:button="@null"
+                android:background="@drawable/selector_color_red"
+                android:layout_margin="4dp" />
+
+        </RadioGroup>
+
+        <!-- Options row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <CheckBox
+                android:id="@+id/cbBold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/bold"
+                android:textColor="@color/text_secondary"
+                android:buttonTint="@color/accent" />
+
+            <CheckBox
+                android:id="@+id/cbShadow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/shadow"
+                android:textColor="@color/text_secondary"
+                android:buttonTint="@color/accent"
+                android:checked="true" />
+
+        </LinearLayout>
+
+        <!-- Action buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddText"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:text="@string/add_text"
+                android:textAllCaps="false"
+                android:layout_marginEnd="6dp"
+                app:backgroundTint="@color/accent"
+                app:cornerRadius="22dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDeleteSelected"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:text="@string/delete_selected"
+                android:textAllCaps="false"
+                android:layout_marginStart="6dp"
+                app:backgroundTint="@color/error"
+                app:cornerRadius="22dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

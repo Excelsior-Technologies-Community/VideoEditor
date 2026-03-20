@@ -1,0 +1,126 @@
+[
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_ic_sticker.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\ic_sticker.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\layout_fragment_filter.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\layout\\fragment_filter.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_ic_video_library.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\ic_video_library.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_bg_filter_item.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\bg_filter_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_ic_video_edit.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\ic_video_edit.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_shape_circle.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\shape_circle.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\menu_menu_editor.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\menu\\menu_editor.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\layout_item_filter_preset.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\layout\\item_filter_preset.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.videoeditor.app-merged_res-40:/raw_vertex_shader.glsl.flat",
+        "source": "com.videoeditor.app-main-42:/raw/vertex_shader.glsl"
+    },
+    {
+        "merged": "com.videoeditor.app-merged_res-40:/raw_fragment_shader.glsl.flat",
+        "source": "com.videoeditor.app-main-42:/raw/fragment_shader.glsl"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_ic_text.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\ic_text.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\raw_vertex_shader.glsl.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\raw\\vertex_shader.glsl"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\color_nav_item_tint.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\color\\nav_item_tint.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_selector_color_red.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\selector_color_red.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\layout_fragment_sticker.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\layout\\fragment_sticker.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\raw_fragment_shader.glsl.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\raw\\fragment_shader.glsl"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\layout_activity_editor.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\layout\\activity_editor.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_selector_color_white.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\selector_color_white.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\layout_item_sticker.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\layout\\item_sticker.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_ic_pause.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\ic_pause.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_ic_filter.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\ic_filter.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_ic_play.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\ic_play.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_selector_color_black.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\selector_color_black.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_ic_arrow_back.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\ic_arrow_back.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\layout_fragment_overlay.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\layout\\fragment_overlay.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-merged_res-40:\\drawable_selector_color_yellow.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\9.0-milestone-1\\com.videoeditor.app-main-42:\\drawable\\selector_color_yellow.xml"
+    }
+]

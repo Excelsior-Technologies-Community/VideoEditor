@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "com.videoeditor.app-mergeDebugResources-39:/layout/fragment_sticker.xml",
+        "source": "com.videoeditor.app-main-42:/layout/fragment_sticker.xml"
+    },
+    {
+        "merged": "com.videoeditor.app-mergeDebugResources-39:/layout/fragment_filter.xml",
+        "source": "com.videoeditor.app-main-42:/layout/fragment_filter.xml"
+    },
+    {
+        "merged": "com.videoeditor.app-mergeDebugResources-39:/layout/fragment_overlay.xml",
+        "source": "com.videoeditor.app-main-42:/layout/fragment_overlay.xml"
+    },
+    {
+        "merged": "com.videoeditor.app-mergeDebugResources-39:/layout/item_filter_preset.xml",
+        "source": "com.videoeditor.app-main-42:/layout/item_filter_preset.xml"
+    },
+    {
+        "merged": "com.videoeditor.app-mergeDebugResources-39:/layout/activity_main.xml",
+        "source": "com.videoeditor.app-main-42:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.videoeditor.app-mergeDebugResources-39:/layout/activity_editor.xml",
+        "source": "com.videoeditor.app-main-42:/layout/activity_editor.xml"
+    },
+    {
+        "merged": "com.videoeditor.app-mergeDebugResources-39:/layout/item_sticker.xml",
+        "source": "com.videoeditor.app-main-42:/layout/item_sticker.xml"
+    }
+]
