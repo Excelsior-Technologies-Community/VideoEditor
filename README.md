@@ -96,3 +96,12 @@ The engine that renders the original video, applies the exact filter parameters,
 - `overlays`: List of `OverlayItem` to print onto the video frames.
 - `videoWidth` / `videoHeight`: Target resolution of the exported video.
 - `videoDurationMs`: Total duration of the clip.
+- 
+## Screenshots
+
+| Home Screen | Filters | Text Overlay | Stickers |
+| :---: | :---: | :---: | :---: |
+| ![Home Screen](Screenshots/homescreen.jpeg) | ![Filters](Screenshots/filters.jpeg) | ![Text Overlay](Screenshots/text.jpeg) | ![Stickers](Screenshots/stickers.jpeg) |
+
+### Video Demo
+![Video Editor Demo](Screenshots/demo.gif)
