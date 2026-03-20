@@ -51,11 +51,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openEditor(uri: Uri) {
-        // Persist URI permission so EditorActivity and its background threads can read it
-        try {
+         try {
             contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
         } catch (e: Exception) {
-            // Some URI providers don't support persistable permissions
+
         }
 
         val intent = Intent(this, EditorActivity::class.java).apply {

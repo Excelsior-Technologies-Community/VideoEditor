@@ -9,7 +9,6 @@
     android:background="@drawable/bg_filter_item"
     android:padding="6dp">
 
-    <!-- Color swatch representing the filter -->
     <View
         android:id="@+id/viewSwatch"
         android:layout_width="48dp"
