@@ -21,7 +21,7 @@ Add the dependency in your app's `build.gradle`:
 
 ```gradle
 dependencies {
-    implementation("com.github.Excelsior-Technologies-Community:VideoEditor:Tag")
+    implementation("com.github.Excelsior-Technologies-Community:VideoEditor:1.1")
 }
 ```
 
@@ -96,3 +96,18 @@ The engine that renders the original video, applies the exact filter parameters,
 - `overlays`: List of `OverlayItem` to print onto the video frames.
 - `videoWidth` / `videoHeight`: Target resolution of the exported video.
 - `videoDurationMs`: Total duration of the clip.
+# VideoEditor
+
+A powerful, customizable, and easy-to-use Android Video Editing library...
+
+## Demo
+![App Preview] 
+![homescreen](https://github.com/user-attachments/assets/9facf302-b04f-4aa2-a7cc-f816bb2b90e8)
+![filters](https://github.com/user-attachments/assets/5fe5cc2f-bcc7-4ec9-81ba-15b0e60c4514)
+![text](https://github.com/user-attachments/assets/3a475d49-9c63-446f-9fcd-accfad9705ab)
+![stickers](https://github.com/user-attachments/assets/4fd9a38d-2096-4b95-8ed0-2da232bbea4c)
+![export](https://github.com/user-attachments/assets/d8ddd8d1-1a52-45a7-82fc-a68bea627b50)
+
+
+
+
