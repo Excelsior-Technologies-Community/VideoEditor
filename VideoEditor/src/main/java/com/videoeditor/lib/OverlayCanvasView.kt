@@ -32,8 +32,8 @@ class OverlayCanvasView @JvmOverloads constructor(
     private val selectionPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
         style = Paint.Style.STROKE
-        strokeWidth = 3f
-        pathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
+        strokeWidth = 4f
+        pathEffect = DashPathEffect(floatArrayOf(15f, 10f), 0f)
     }
 
     private val scaleDetector = ScaleGestureDetector(context,
@@ -96,25 +96,39 @@ class OverlayCanvasView @JvmOverloads constructor(
 
     private fun drawText(canvas: Canvas, item: OverlayItem.TextOverlay) {
         textPaint.apply {
-            color    = item.textColor
+            color = item.textColor
             textSize = item.fontSize
             typeface = if (item.bold) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
+            textAlign = Paint.Align.CENTER
         }
-        val bounds = Rect()
-        textPaint.getTextBounds(item.text, 0, item.text.length, bounds)
-        val pad = 12f
+
+        val fm = textPaint.fontMetrics
+        val textHeight = fm.descent - fm.ascent
+        val centerY = -(fm.ascent + fm.descent) / 2
+
+        val textWidth = textPaint.measureText(item.text)
+
+        val hPad = 40f
+        val vPad = 24f
+
+        val left = -textWidth / 2 - hPad
+        val right = textWidth / 2 + hPad
+        val top = -textHeight / 2 - vPad
+        val bottom = textHeight / 2 + vPad
 
         if (item.bgColor != Color.TRANSPARENT) {
             bgPaint.color = item.bgColor
-            canvas.drawRoundRect(bounds.left - pad, bounds.top - pad, bounds.right + pad, bounds.bottom + pad, 8f, 8f, bgPaint)
+            canvas.drawRoundRect(
+                RectF(left, top, right, bottom),
+                16f, 16f, bgPaint
+            )
         }
 
-        if (item.hasShadow) textPaint.setShadowLayer(4f, 2f, 2f, Color.BLACK)
+        if (item.hasShadow) textPaint.setShadowLayer(8f, 4f, 4f, Color.BLACK)
         else textPaint.clearShadowLayer()
 
-        canvas.drawText(item.text, -bounds.width() / 2f, bounds.height() / 2f, textPaint)
+        canvas.drawText(item.text, 0f, centerY, textPaint)
     }
-
     private fun drawSticker(canvas: Canvas, item: OverlayItem.StickerOverlay) {
         val hw = item.bitmap.width / 2f
         val hh = item.bitmap.height / 2f
@@ -124,18 +138,37 @@ class OverlayCanvasView @JvmOverloads constructor(
     private fun getLocalBounds(item: OverlayItem): RectF {
         return when (item) {
             is OverlayItem.TextOverlay -> {
-                textPaint.textSize = item.fontSize
-                val b = Rect()
-                textPaint.getTextBounds(item.text, 0, item.text.length, b)
-                val pad = 16f
-                RectF(b.left - pad, b.top - pad, b.right + pad, b.bottom + pad)
+                textPaint.apply {
+                    textSize = item.fontSize
+                    typeface = if (item.bold) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
+                    textAlign = Paint.Align.CENTER
+                }
+
+                val fm = textPaint.fontMetrics
+                val textHeight = fm.descent - fm.ascent
+                val textWidth = textPaint.measureText(item.text)
+
+                val hPad = 40f
+                val vPad = 24f
+
+                RectF(
+                    -textWidth / 2 - hPad,
+                    -textHeight / 2 - vPad,
+                    textWidth / 2 + hPad,
+                    textHeight / 2 + vPad
+                )
             }
+
             is OverlayItem.StickerOverlay -> {
-                RectF(-item.bitmap.width / 2f, -item.bitmap.height / 2f, item.bitmap.width / 2f, item.bitmap.height / 2f)
+                RectF(
+                    -item.bitmap.width / 2f,
+                    -item.bitmap.height / 2f,
+                    item.bitmap.width / 2f,
+                    item.bitmap.height / 2f
+                )
             }
         }
     }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         scaleDetector.onTouchEvent(event)
@@ -180,11 +213,18 @@ class OverlayCanvasView @JvmOverloads constructor(
     }
 
     private fun findOverlayAt(x: Float, y: Float): OverlayItem? {
-        return overlays.lastOrNull { item ->
+        return overlays.asReversed().firstOrNull { item ->
             val cx = item.normX * width
             val cy = item.normY * height
-            val dist = sqrt((x - cx).pow(2) + (y - cy).pow(2))
-            dist < 100f * item.scale
+            val matrix = Matrix()
+            matrix.setTranslate(cx, cy)
+            matrix.preRotate(item.rotation)
+            matrix.preScale(item.scale, item.scale)
+            val invMatrix = Matrix()
+            matrix.invert(invMatrix)
+            val pts = floatArrayOf(x, y)
+            invMatrix.mapPoints(pts)
+            getLocalBounds(item).contains(pts[0], pts[1])
         }
     }
 
