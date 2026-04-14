@@ -1,81 +1,89 @@
 package com.videoeditor.lib.engine
 
-import android.media.MediaPlayer
+import android.content.Context
 import android.net.Uri
-import android.os.Handler
-import android.os.Looper
-import android.view.Surface
 import android.util.Log
+import android.view.Surface
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 
-class VideoPlayer {
-    private var mediaPlayer: MediaPlayer? = null
-    private val mainHandler = Handler(Looper.getMainLooper())
+class VideoPlayer(context: Context) {
+    private var exoPlayer: ExoPlayer? = ExoPlayer.Builder(context).build()
 
     var onPrepared: (() -> Unit)? = null
     var onCompletion: (() -> Unit)? = null
     var onError: ((String) -> Unit)? = null
     var onProgressUpdate: ((Long, Long) -> Unit)? = null
 
-    private var progressRunnable: Runnable? = null
+    val isPlaying: Boolean get() = exoPlayer?.isPlaying == true
+    val duration: Long get() = exoPlayer?.duration ?: 0L
+    val currentPosition: Long get() = exoPlayer?.currentPosition ?: 0L
 
-    val isPlaying: Boolean get() = mediaPlayer?.isPlaying == true
-    val duration:  Long    get() = mediaPlayer?.duration?.toLong() ?: 0L
-    val currentPosition: Long get() = mediaPlayer?.currentPosition?.toLong() ?: 0L
-
-    fun prepare(uri: Uri, context: android.content.Context, surface: Surface) {
-        release()
-        try {
-            mediaPlayer = MediaPlayer().apply {
-                setDataSource(context, uri)
-                setSurface(surface)
-                isLooping = false
-                setOnPreparedListener {
+    private val listener = object : Player.Listener {
+        override fun onPlaybackStateChanged(playbackState: Int) {
+            when (playbackState) {
+                Player.STATE_READY -> {
                     onPrepared?.invoke()
-                    startProgressTracking()
                 }
-                setOnCompletionListener { onCompletion?.invoke() }
-                setOnErrorListener { _, what, extra ->
-                    val msg = "MediaPlayer error: what=$what, extra=$extra"
-                    Log.e("VideoPlayer", msg)
-                    onError?.invoke(msg)
-                    true
+                Player.STATE_ENDED -> {
+                    onCompletion?.invoke()
                 }
-                prepareAsync()
+                Player.STATE_IDLE -> {}
+                Player.STATE_BUFFERING -> {}
             }
-        } catch (e: Exception) {
-            Log.e("VideoPlayer", "Failed to prepare MediaPlayer", e)
-            onError?.invoke(e.message ?: "Unknown error")
+        }
+
+        override fun onEvents(player: Player, events: Player.Events) {
+            if (events.contains(Player.EVENT_POSITION_DISCONTINUITY) ||
+                events.contains(Player.EVENT_PLAY_WHEN_READY_CHANGED) ||
+                events.contains(Player.EVENT_TIMELINE_CHANGED) ||
+                events.contains(Player.EVENT_PLAYBACK_STATE_CHANGED)
+            ) {
+                updateProgress()
+            }
+        }
+
+        override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+            Log.e("VideoPlayer", "ExoPlayer error", error)
+            onError?.invoke(error.message ?: "Unknown ExoPlayer error")
         }
     }
 
-    fun play()  { mediaPlayer?.start() }
-    fun pause() { mediaPlayer?.pause() }
-    fun seekTo(ms: Long) { mediaPlayer?.seekTo(ms.toInt()) }
+    init {
+        exoPlayer?.addListener(listener)
+    }
 
-    private fun startProgressTracking() {
-        progressRunnable = object : Runnable {
-            override fun run() {
-                mediaPlayer?.let {
-                    if (it.isPlaying) {
-                        onProgressUpdate?.invoke(it.currentPosition.toLong(), it.duration.toLong())
-                    }
-                }
-                mainHandler.postDelayed(this, 100)
-            }
+    fun prepare(uri: Uri, surface: Surface) {
+        exoPlayer?.apply {
+            setVideoSurface(surface)
+            setMediaItem(MediaItem.fromUri(uri))
+            prepare()
         }
-        mainHandler.post(progressRunnable!!)
+    }
+
+    fun play() {
+        exoPlayer?.playWhenReady = true
+        exoPlayer?.play()
+    }
+
+    fun pause() {
+        exoPlayer?.pause()
+    }
+
+    fun seekTo(ms: Long) {
+        exoPlayer?.seekTo(ms)
+    }
+
+    private fun updateProgress() {
+        exoPlayer?.let {
+            onProgressUpdate?.invoke(it.currentPosition, it.duration)
+        }
     }
 
     fun release() {
-        progressRunnable?.let { mainHandler.removeCallbacks(it) }
-        mediaPlayer?.apply {
-            try {
-                if (isPlaying) stop()
-                release()
-            } catch (e: Exception) {
-                Log.e("VideoPlayer", "Error releasing MediaPlayer", e)
-            }
-        }
-        mediaPlayer = null
+        exoPlayer?.removeListener(listener)
+        exoPlayer?.release()
+        exoPlayer = null
     }
 }

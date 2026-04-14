@@ -31,7 +31,7 @@ class EditorActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityEditorBinding
     val viewModel: EditorViewModel by viewModels()
-    private val player = VideoPlayer()
+    private var player: VideoPlayer? = null
     private var playerSurface: Surface? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,9 +48,11 @@ class EditorActivity : AppCompatActivity() {
         val fragSrc = resources.openRawResource(R.raw.fragment_shader).bufferedReader().readText().trim('\uFEFF', '\u200B')
         binding.glSurfaceView.setShaders(vertSrc, fragSrc)
 
+        player = VideoPlayer(this)
+
         binding.glSurfaceView.onSurfaceReady = { surface ->
             playerSurface = surface
-            player.prepare(uri, this, surface)
+            player?.prepare(uri, surface)
         }
 
         viewModel.filterParams.observe(this) { params ->
@@ -132,14 +134,14 @@ class EditorActivity : AppCompatActivity() {
     }
 
     private fun setupPlaybackControls() {
-        player.onPrepared = {
+        player?.onPrepared = {
             binding.btnPlayPause.setImageResource(R.drawable.ic_pause)
-            player.play()
+            player?.play()
         }
-        player.onCompletion = {
+        player?.onCompletion = {
             binding.btnPlayPause.setImageResource(R.drawable.ic_play)
         }
-        player.onProgressUpdate = { cur, dur ->
+        player?.onProgressUpdate = { cur, dur ->
             runOnUiThread {
                 binding.seekBar.max  = dur.toInt()
                 binding.seekBar.progress = cur.toInt()
@@ -148,18 +150,18 @@ class EditorActivity : AppCompatActivity() {
         }
 
         binding.btnPlayPause.setOnClickListener {
-            if (player.isPlaying) {
-                player.pause()
+            if (player?.isPlaying == true) {
+                player?.pause()
                 binding.btnPlayPause.setImageResource(R.drawable.ic_play)
             } else {
-                player.play()
+                player?.play()
                 binding.btnPlayPause.setImageResource(R.drawable.ic_pause)
             }
         }
 
         binding.seekBar.setOnSeekBarChangeListener(object : android.widget.SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(sb: android.widget.SeekBar, p: Int, fromUser: Boolean) {
-                if (fromUser) player.seekTo(p.toLong())
+                if (fromUser) player?.seekTo(p.toLong())
             }
             override fun onStartTrackingTouch(sb: android.widget.SeekBar) {}
             override fun onStopTrackingTouch(sb: android.widget.SeekBar) {}
@@ -198,8 +200,6 @@ class EditorActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        player.release()
+        player?.release()
     }
 }
-
-

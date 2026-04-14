@@ -5,6 +5,7 @@ color accent_dark
 color bg_card
 color bg_dark
 color bg_surface
+color border_color
 color error
 color nav_item_selected
 color nav_item_tint
@@ -12,6 +13,7 @@ color nav_item_unselected
 color text_primary
 color text_secondary
 drawable bg_filter_item
+drawable bg_text_style_item
 drawable ic_arrow_back
 drawable ic_filter
 drawable ic_launcher_background
@@ -35,8 +37,6 @@ id btnDeleteSticker
 id btnExport
 id btnPickVideo
 id btnPlayPause
-id cbBold
-id cbShadow
 id etTextInput
 id exportProgressBar
 id fragmentContainer
@@ -48,13 +48,9 @@ id nav_text
 id overlayCanvasView
 id playbackControls
 id previewContainer
-id rbBlack
-id rbRed
-id rbWhite
-id rbYellow
-id rgTextColor
 id rvPresets
 id rvStickers
+id rvTextStyles
 id seekBar
 id seekBrightness
 id seekContrast
@@ -63,6 +59,7 @@ id seekSaturation
 id toolbar
 id tvEmoji
 id tvFilterName
+id tvStyleName
 id tvSubtitle
 id tvTimecode
 id tvTitle
@@ -74,6 +71,7 @@ layout fragment_overlay
 layout fragment_sticker
 layout item_filter_preset
 layout item_sticker
+layout item_text_style
 menu menu_editor
 mipmap ic_launcher
 mipmap ic_launcher_round

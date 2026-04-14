@@ -11,7 +11,6 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <!-- Text input -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,13 +29,28 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Font size slider -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Style"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTextStyles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="12dp">
             <TextView
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
@@ -52,84 +66,11 @@
                 android:thumbTint="@color/accent" />
         </LinearLayout>
 
-        <!-- Color picker row -->
-        <RadioGroup
-            android:id="@+id/rgTextColor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:gravity="center">
-
-            <RadioButton
-                android:id="@+id/rbWhite"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:button="@null"
-                android:background="@drawable/selector_color_white"
-                android:checked="true"
-                android:layout_margin="4dp" />
-
-            <RadioButton
-                android:id="@+id/rbBlack"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:button="@null"
-                android:background="@drawable/selector_color_black"
-                android:layout_margin="4dp" />
-
-            <RadioButton
-                android:id="@+id/rbYellow"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:button="@null"
-                android:background="@drawable/selector_color_yellow"
-                android:layout_margin="4dp" />
-
-            <RadioButton
-                android:id="@+id/rbRed"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:button="@null"
-                android:background="@drawable/selector_color_red"
-                android:layout_margin="4dp" />
-
-        </RadioGroup>
-
-        <!-- Options row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="8dp">
-
-            <CheckBox
-                android:id="@+id/cbBold"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/bold"
-                android:textColor="@color/text_secondary"
-                android:buttonTint="@color/accent" />
-
-            <CheckBox
-                android:id="@+id/cbShadow"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/shadow"
-                android:textColor="@color/text_secondary"
-                android:buttonTint="@color/accent"
-                android:checked="true" />
-
-        </LinearLayout>
-
-        <!-- Action buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="16dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAddText"

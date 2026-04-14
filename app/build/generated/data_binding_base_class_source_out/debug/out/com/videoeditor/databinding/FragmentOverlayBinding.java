@@ -4,13 +4,11 @@ package com.videoeditor.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.google.android.material.button.MaterialButton;
@@ -31,49 +29,22 @@ public final class FragmentOverlayBinding implements ViewBinding {
   public final MaterialButton btnDeleteSelected;
 
   @NonNull
-  public final CheckBox cbBold;
-
-  @NonNull
-  public final CheckBox cbShadow;
-
-  @NonNull
   public final TextInputEditText etTextInput;
 
   @NonNull
-  public final RadioButton rbBlack;
-
-  @NonNull
-  public final RadioButton rbRed;
-
-  @NonNull
-  public final RadioButton rbWhite;
-
-  @NonNull
-  public final RadioButton rbYellow;
-
-  @NonNull
-  public final RadioGroup rgTextColor;
+  public final RecyclerView rvTextStyles;
 
   @NonNull
   public final SeekBar seekFontSize;
 
   private FragmentOverlayBinding(@NonNull ScrollView rootView, @NonNull MaterialButton btnAddText,
-      @NonNull MaterialButton btnDeleteSelected, @NonNull CheckBox cbBold,
-      @NonNull CheckBox cbShadow, @NonNull TextInputEditText etTextInput,
-      @NonNull RadioButton rbBlack, @NonNull RadioButton rbRed, @NonNull RadioButton rbWhite,
-      @NonNull RadioButton rbYellow, @NonNull RadioGroup rgTextColor,
-      @NonNull SeekBar seekFontSize) {
+      @NonNull MaterialButton btnDeleteSelected, @NonNull TextInputEditText etTextInput,
+      @NonNull RecyclerView rvTextStyles, @NonNull SeekBar seekFontSize) {
     this.rootView = rootView;
     this.btnAddText = btnAddText;
     this.btnDeleteSelected = btnDeleteSelected;
-    this.cbBold = cbBold;
-    this.cbShadow = cbShadow;
     this.etTextInput = etTextInput;
-    this.rbBlack = rbBlack;
-    this.rbRed = rbRed;
-    this.rbWhite = rbWhite;
-    this.rbYellow = rbYellow;
-    this.rgTextColor = rgTextColor;
+    this.rvTextStyles = rvTextStyles;
     this.seekFontSize = seekFontSize;
   }
 
@@ -116,51 +87,15 @@ public final class FragmentOverlayBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.cbBold;
-      CheckBox cbBold = ViewBindings.findChildViewById(rootView, id);
-      if (cbBold == null) {
-        break missingId;
-      }
-
-      id = R.id.cbShadow;
-      CheckBox cbShadow = ViewBindings.findChildViewById(rootView, id);
-      if (cbShadow == null) {
-        break missingId;
-      }
-
       id = R.id.etTextInput;
       TextInputEditText etTextInput = ViewBindings.findChildViewById(rootView, id);
       if (etTextInput == null) {
         break missingId;
       }
 
-      id = R.id.rbBlack;
-      RadioButton rbBlack = ViewBindings.findChildViewById(rootView, id);
-      if (rbBlack == null) {
-        break missingId;
-      }
-
-      id = R.id.rbRed;
-      RadioButton rbRed = ViewBindings.findChildViewById(rootView, id);
-      if (rbRed == null) {
-        break missingId;
-      }
-
-      id = R.id.rbWhite;
-      RadioButton rbWhite = ViewBindings.findChildViewById(rootView, id);
-      if (rbWhite == null) {
-        break missingId;
-      }
-
-      id = R.id.rbYellow;
-      RadioButton rbYellow = ViewBindings.findChildViewById(rootView, id);
-      if (rbYellow == null) {
-        break missingId;
-      }
-
-      id = R.id.rgTextColor;
-      RadioGroup rgTextColor = ViewBindings.findChildViewById(rootView, id);
-      if (rgTextColor == null) {
+      id = R.id.rvTextStyles;
+      RecyclerView rvTextStyles = ViewBindings.findChildViewById(rootView, id);
+      if (rvTextStyles == null) {
         break missingId;
       }
 
@@ -171,8 +106,7 @@ public final class FragmentOverlayBinding implements ViewBinding {
       }
 
       return new FragmentOverlayBinding((ScrollView) rootView, btnAddText, btnDeleteSelected,
-          cbBold, cbShadow, etTextInput, rbBlack, rbRed, rbWhite, rbYellow, rgTextColor,
-          seekFontSize);
+          etTextInput, rvTextStyles, seekFontSize);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

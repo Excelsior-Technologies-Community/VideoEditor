@@ -20,11 +20,6 @@ class StickerFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: EditorViewModel by activityViewModels()
 
-    private val emojiList = listOf(
-        "❤️", "😂", "🔥", "⭐", "🎉", "👍", "💯", "✨",
-        "🌈", "🎵", "💫", "🏆", "🎯", "💥", "🌟", "😎"
-    )
-
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View {
         _binding = FragmentStickerBinding.inflate(i, c, false)
         return binding.root
@@ -33,17 +28,18 @@ class StickerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = StickerAdapter(emojiList) { emoji ->
-            val bitmap = emojiBitmap(emoji, 160)
-            val item = OverlayItem.StickerOverlay(bitmap = bitmap)
-            viewModel.addOverlay(item)
-            (requireActivity() as EditorActivity)
-                .binding.overlayCanvasView.addOverlay(item)
-        }
-
-        binding.rvStickers.apply {
-            layoutManager = GridLayoutManager(requireContext(), 4)
-            this.adapter = adapter
+        viewModel.emojiList.observe(viewLifecycleOwner) { emojis ->
+            val adapter = StickerAdapter(emojis) { emoji ->
+                val bitmap = emojiBitmap(emoji, 160)
+                val item = OverlayItem.StickerOverlay(bitmap = bitmap)
+                viewModel.addOverlay(item)
+                (requireActivity() as EditorActivity)
+                    .binding.overlayCanvasView.addOverlay(item)
+            }
+            binding.rvStickers.apply {
+                layoutManager = GridLayoutManager(requireContext(), 4)
+                this.adapter = adapter
+            }
         }
 
         binding.btnDeleteSticker.setOnClickListener {

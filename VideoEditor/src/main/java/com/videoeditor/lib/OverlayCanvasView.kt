@@ -98,37 +98,52 @@ class OverlayCanvasView @JvmOverloads constructor(
         textPaint.apply {
             color = item.textColor
             textSize = item.fontSize
-            typeface = if (item.bold) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
-            textAlign = Paint.Align.CENTER
+            typeface = item.typeface
+            if (item.bold && typeface != Typeface.DEFAULT_BOLD) {
+                isFakeBoldText = true
+            } else {
+                isFakeBoldText = false
+            }
+            textAlign = Paint.Align.LEFT
         }
 
+        val bounds = Rect()
+        textPaint.getTextBounds(item.text, 0, item.text.length, bounds)
         val fm = textPaint.fontMetrics
-        val textHeight = fm.descent - fm.ascent
-        val centerY = -(fm.ascent + fm.descent) / 2
+        val advanceWidth = textPaint.measureText(item.text)
 
-        val textWidth = textPaint.measureText(item.text)
+        val contentLeft = min(0f, bounds.left.toFloat())
+        val contentRight = max(advanceWidth, bounds.right.toFloat())
+        val totalWidth = contentRight - contentLeft
+        val totalHeight = fm.descent - fm.ascent
 
-        val hPad = 40f
-        val vPad = 24f
+        val contentCenterX = (contentLeft + contentRight) / 2f
+        val contentCenterY = (fm.ascent + fm.descent) / 2f
 
-        val left = -textWidth / 2 - hPad
-        val right = textWidth / 2 + hPad
-        val top = -textHeight / 2 - vPad
-        val bottom = textHeight / 2 + vPad
+        val drawX = -contentCenterX
+        val drawY = -contentCenterY
+
+        val hPad = 100f
+        val topPad = 50f
+        val bottomPad = 100f
 
         if (item.bgColor != Color.TRANSPARENT) {
             bgPaint.color = item.bgColor
-            canvas.drawRoundRect(
-                RectF(left, top, right, bottom),
-                16f, 16f, bgPaint
+            val bgRect = RectF(
+                -totalWidth / 2f - hPad,
+                -totalHeight / 2f - topPad,
+                totalWidth / 2f + hPad,
+                totalHeight / 2f + bottomPad
             )
+            canvas.drawRoundRect(bgRect, 40f, 40f, bgPaint)
         }
 
-        if (item.hasShadow) textPaint.setShadowLayer(8f, 4f, 4f, Color.BLACK)
+        if (item.hasShadow) textPaint.setShadowLayer(10f, 5f, 5f, Color.BLACK)
         else textPaint.clearShadowLayer()
 
-        canvas.drawText(item.text, 0f, centerY, textPaint)
+        canvas.drawText(item.text, drawX, drawY, textPaint)
     }
+
     private fun drawSticker(canvas: Canvas, item: OverlayItem.StickerOverlay) {
         val hw = item.bitmap.width / 2f
         val hh = item.bitmap.height / 2f
@@ -140,22 +155,27 @@ class OverlayCanvasView @JvmOverloads constructor(
             is OverlayItem.TextOverlay -> {
                 textPaint.apply {
                     textSize = item.fontSize
-                    typeface = if (item.bold) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
-                    textAlign = Paint.Align.CENTER
+                    typeface = item.typeface
                 }
-
+                val bounds = Rect()
+                textPaint.getTextBounds(item.text, 0, item.text.length, bounds)
                 val fm = textPaint.fontMetrics
-                val textHeight = fm.descent - fm.ascent
-                val textWidth = textPaint.measureText(item.text)
+                val advanceWidth = textPaint.measureText(item.text)
 
-                val hPad = 40f
-                val vPad = 24f
+                val contentLeft = min(0f, bounds.left.toFloat())
+                val contentRight = max(advanceWidth, bounds.right.toFloat())
+                val totalWidth = contentRight - contentLeft
+                val totalHeight = fm.descent - fm.ascent
+
+                val hPad = 100f
+                val topPad = 50f
+                val bottomPad = 100f
 
                 RectF(
-                    -textWidth / 2 - hPad,
-                    -textHeight / 2 - vPad,
-                    textWidth / 2 + hPad,
-                    textHeight / 2 + vPad
+                    -totalWidth / 2f - hPad,
+                    -totalHeight / 2f - topPad,
+                    totalWidth / 2f + hPad,
+                    totalHeight / 2f + bottomPad
                 )
             }
 
@@ -169,6 +189,7 @@ class OverlayCanvasView @JvmOverloads constructor(
             }
         }
     }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         scaleDetector.onTouchEvent(event)

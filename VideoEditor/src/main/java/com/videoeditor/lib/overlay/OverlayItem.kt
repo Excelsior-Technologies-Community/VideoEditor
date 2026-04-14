@@ -2,6 +2,7 @@ package com.videoeditor.lib.overlay
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Typeface
 import java.util.UUID
 
 sealed class OverlayItem {
@@ -16,6 +17,7 @@ sealed class OverlayItem {
         var text: String        = "Text",
         var textColor: Int      = Color.WHITE,
         var fontSize: Float     = 48f,
+        var typeface: Typeface  = Typeface.DEFAULT,
         var bold: Boolean       = false,
         var hasShadow: Boolean  = true,
         var bgColor: Int        = Color.TRANSPARENT,

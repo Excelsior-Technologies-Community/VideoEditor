@@ -1,6 +1,8 @@
 package com.videoeditor.ui
 
 import android.app.Application
+import android.graphics.Color
+import android.graphics.Typeface
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +12,7 @@ import com.videoeditor.lib.engine.VideoExporter
 import com.videoeditor.lib.filters.FilterParams
 import com.videoeditor.lib.filters.FilterPreset
 import com.videoeditor.lib.overlay.OverlayItem
+import com.videoeditor.lib.overlay.TextStyle
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -21,6 +24,19 @@ class EditorViewModel(app: Application) : AndroidViewModel(app) {
     val overlays = MutableLiveData<MutableList<OverlayItem>>(mutableListOf())
     val exportProgress = MutableLiveData<Int>()
     val exportResult = MutableLiveData<VideoExporter.ExportResult?>()
+
+    // Configurable from user side
+    val emojiList = MutableLiveData<List<String>>(listOf(
+        "❤️", "😂", "🔥", "⭐", "🎉", "👍", "💯", "✨",
+        "🌈", "🎵", "💫", "🏆", "🎯", "💥", "🌟", "😎"
+    ))
+
+    val textStyles = MutableLiveData<List<TextStyle>>(listOf(
+        TextStyle("Classic", Color.WHITE, Typeface.DEFAULT, isBold = false),
+        TextStyle("Bold", Color.WHITE, Typeface.DEFAULT_BOLD, isBold = true),
+        TextStyle("Yellow Glow", Color.YELLOW, Typeface.SANS_SERIF, hasShadow = true),
+        TextStyle("Red Alert", Color.RED, Typeface.MONOSPACE, isBold = true)
+    ))
 
     fun applyPreset(preset: FilterPreset) {
         activePreset.value = preset

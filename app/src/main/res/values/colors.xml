@@ -15,6 +15,7 @@
 
     <!-- Status -->
     <color name="error">#CF6679</color>
+    <color name="border_color">#333333</color>
 
     <!-- Nav item -->
     <color name="nav_item_selected">#FF6B6B</color>
