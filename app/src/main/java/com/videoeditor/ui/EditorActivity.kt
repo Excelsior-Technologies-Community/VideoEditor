@@ -19,7 +19,7 @@ import com.videoeditor.lib.engine.VideoPlayer
 import com.videoeditor.lib.engine.VideoExporter
 import com.videoeditor.ui.fragments.FilterFragment
 import com.videoeditor.ui.fragments.OverlayFragment
-import com.videoeditor.ui.fragments.StickerFragment
+import com.videoeditor.ui.fragments.GifFragment
 import java.io.File
 import java.io.FileInputStream
 
@@ -173,7 +173,7 @@ class EditorActivity : AppCompatActivity() {
             val fragment: Fragment = when (item.itemId) {
                 R.id.nav_filter  -> FilterFragment()
                 R.id.nav_text    -> OverlayFragment()
-                R.id.nav_sticker -> StickerFragment()
+                R.id.nav_gif     -> GifFragment()
                 else -> return@setOnItemSelectedListener false
             }
             supportFragmentManager.beginTransaction()

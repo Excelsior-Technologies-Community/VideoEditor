@@ -1,34 +1,42 @@
 [
     {
-        "merged": "com.videoeditor.app-mergeDebugResources-42:/layout/item_text_style.xml",
-        "source": "com.videoeditor.app-main-45:/layout/item_text_style.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-mergeDebugResources-42:\\layout\\fragment_overlay.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-main-45:\\layout\\fragment_overlay.xml"
     },
     {
-        "merged": "com.videoeditor.app-mergeDebugResources-42:/layout/activity_editor.xml",
-        "source": "com.videoeditor.app-main-45:/layout/activity_editor.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-mergeDebugResources-42:\\layout\\fragment_filter.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-main-45:\\layout\\fragment_filter.xml"
     },
     {
-        "merged": "com.videoeditor.app-mergeDebugResources-42:/layout/item_filter_preset.xml",
-        "source": "com.videoeditor.app-main-45:/layout/item_filter_preset.xml"
+        "merged": "com.videoeditor.app-mergeDebugResources-42:/layout/fragment_gif.xml",
+        "source": "com.videoeditor.app-main-45:/layout/fragment_gif.xml"
     },
     {
-        "merged": "com.videoeditor.app-mergeDebugResources-42:/layout/activity_main.xml",
-        "source": "com.videoeditor.app-main-45:/layout/activity_main.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-mergeDebugResources-42:\\layout\\item_filter_preset.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-main-45:\\layout\\item_filter_preset.xml"
     },
     {
-        "merged": "com.videoeditor.app-mergeDebugResources-42:/layout/fragment_overlay.xml",
-        "source": "com.videoeditor.app-main-45:/layout/fragment_overlay.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-mergeDebugResources-42:\\layout\\fragment_sticker.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-main-45:\\layout\\fragment_sticker.xml"
     },
     {
-        "merged": "com.videoeditor.app-mergeDebugResources-42:/layout/fragment_filter.xml",
-        "source": "com.videoeditor.app-main-45:/layout/fragment_filter.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-mergeDebugResources-42:\\layout\\item_text_style.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-main-45:\\layout\\item_text_style.xml"
     },
     {
-        "merged": "com.videoeditor.app-mergeDebugResources-42:/layout/item_sticker.xml",
-        "source": "com.videoeditor.app-main-45:/layout/item_sticker.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-mergeDebugResources-42:\\layout\\fragment_gif.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-main-45:\\layout\\fragment_gif.xml"
     },
     {
-        "merged": "com.videoeditor.app-mergeDebugResources-42:/layout/fragment_sticker.xml",
-        "source": "com.videoeditor.app-main-45:/layout/fragment_sticker.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-mergeDebugResources-42:\\layout\\activity_editor.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-main-45:\\layout\\activity_editor.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-mergeDebugResources-42:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-main-45:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-mergeDebugResources-42:\\layout\\item_sticker.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.4\\com.videoeditor.app-main-45:\\layout\\item_sticker.xml"
     }
 ]

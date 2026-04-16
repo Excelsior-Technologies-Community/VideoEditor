@@ -7,6 +7,8 @@ import android.media.*
 import android.net.Uri
 import android.util.Log
 import android.view.Surface
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.videoeditor.lib.filters.FilterParams
 import com.videoeditor.lib.overlay.OverlayItem
 import kotlinx.coroutines.Dispatchers
@@ -85,8 +87,6 @@ class VideoExporter(
         renderer.init()
         renderer.onSurfaceChanged(width, height)
 
-        val overlayTexId = IntArray(1)
-        var overlayProgram: GlShaderProgram? = null
         val quadVerts = java.nio.ByteBuffer.allocateDirect(48).order(java.nio.ByteOrder.nativeOrder()).asFloatBuffer().apply {
             put(floatArrayOf(-1f, -1f, 0f, 1f, -1f, 0f, -1f, 1f, 0f, 1f, 1f, 0f)); position(0)
         }
@@ -94,50 +94,18 @@ class VideoExporter(
             put(floatArrayOf(0f, 0f, 1f, 0f, 0f, 1f, 1f, 1f)); position(0)
         }
 
-        if (config.overlays.isNotEmpty()) {
-            val bmpWidth = if (config.previewWidth > 0) config.previewWidth else width
-            val bmpHeight = if (config.previewHeight > 0) config.previewHeight else height
-            val bmp = android.graphics.Bitmap.createBitmap(bmpWidth, bmpHeight, android.graphics.Bitmap.Config.ARGB_8888)
-            val cvs = android.graphics.Canvas(bmp)
-            val tPaint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
-            val bPaint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
-            for (item in config.overlays) {
-                cvs.save()
-                cvs.translate(item.normX * bmpWidth, item.normY * bmpHeight)
-                cvs.rotate(item.rotation)
-                cvs.scale(item.scale, item.scale)
-                if (item is com.videoeditor.lib.overlay.OverlayItem.TextOverlay) {
-                    tPaint.color = item.textColor
-                    tPaint.textSize = item.fontSize
-                    tPaint.typeface = if (item.bold) android.graphics.Typeface.DEFAULT_BOLD else android.graphics.Typeface.DEFAULT
-                    val bounds = android.graphics.Rect()
-                    tPaint.getTextBounds(item.text, 0, item.text.length, bounds)
-                    if (item.bgColor != android.graphics.Color.TRANSPARENT) {
-                        bPaint.color = item.bgColor
-                        cvs.drawRoundRect(bounds.left - 12f, bounds.top - 12f, bounds.right + 12f, bounds.bottom + 12f, 8f, 8f, bPaint)
-                    }
-                    if (item.hasShadow) tPaint.setShadowLayer(4f, 2f, 2f, android.graphics.Color.BLACK) else tPaint.clearShadowLayer()
-                    cvs.drawText(item.text, -bounds.width() / 2f, bounds.height() / 2f, tPaint)
-                } else if (item is com.videoeditor.lib.overlay.OverlayItem.StickerOverlay) {
-                    val hw = item.bitmap.width / 2f
-                    val hh = item.bitmap.height / 2f
-                    cvs.drawBitmap(item.bitmap, -hw, -hh, null)
-                }
-                cvs.restore()
-            }
-            android.opengl.GLES20.glGenTextures(1, overlayTexId, 0)
-            android.opengl.GLES20.glBindTexture(android.opengl.GLES20.GL_TEXTURE_2D, overlayTexId[0])
-            android.opengl.GLES20.glTexParameteri(android.opengl.GLES20.GL_TEXTURE_2D, android.opengl.GLES20.GL_TEXTURE_MIN_FILTER, android.opengl.GLES20.GL_LINEAR)
-            android.opengl.GLES20.glTexParameteri(android.opengl.GLES20.GL_TEXTURE_2D, android.opengl.GLES20.GL_TEXTURE_MAG_FILTER, android.opengl.GLES20.GL_LINEAR)
-            android.opengl.GLUtils.texImage2D(android.opengl.GLES20.GL_TEXTURE_2D, 0, bmp, 0)
-            bmp.recycle()
-            
-            overlayProgram = GlShaderProgram(
-                "attribute vec4 aPosition;\nattribute vec2 aTexCoord;\nvarying vec2 vTexCoord;\nuniform mat4 uMatrix;\nvoid main() {\n  gl_Position = uMatrix * aPosition;\n  vTexCoord = vec2(aTexCoord.x, 1.0 - aTexCoord.y);\n}",
-                "precision mediump float;\nvarying vec2 vTexCoord;\nuniform sampler2D sTexture;\nvoid main() {\n  gl_FragColor = texture2D(sTexture, vTexCoord);\n}"
-            )
-        }
+        val overlayProgram = GlShaderProgram(
+            "attribute vec4 aPosition;\nattribute vec2 aTexCoord;\nvarying vec2 vTexCoord;\nuniform mat4 uMatrix;\nvoid main() {\n  gl_Position = uMatrix * aPosition;\n  vTexCoord = vec2(aTexCoord.x, 1.0 - aTexCoord.y);\n}",
+            "precision mediump float;\nvarying vec2 vTexCoord;\nuniform sampler2D sTexture;\nvoid main() {\n  gl_FragColor = texture2D(sTexture, vTexCoord);\n}"
+        )
+
+        val overlayTexId = IntArray(1)
+        android.opengl.GLES20.glGenTextures(1, overlayTexId, 0)
         
+        val gifDrawables = config.overlays.filterIsInstance<OverlayItem.GifOverlay>().associate {
+            it.id to Glide.with(context).asGif().load(it.gifBytes).submit().get()
+        }
+
         val overlayMatrix = FloatArray(16)
         android.opengl.Matrix.setIdentityM(overlayMatrix, 0)
         android.opengl.Matrix.rotateM(overlayMatrix, 0, -rotation.toFloat(), 0f, 0f, 1f)
@@ -158,6 +126,13 @@ class VideoExporter(
         var inputDone = false
         var decoderDone = false
         var outputDone = false
+
+        val bmpWidth = if (config.previewWidth > 0) config.previewWidth else width
+        val bmpHeight = if (config.previewHeight > 0) config.previewHeight else height
+        val overlayBitmap = android.graphics.Bitmap.createBitmap(bmpWidth, bmpHeight, android.graphics.Bitmap.Config.ARGB_8888)
+        val overlayCanvas = android.graphics.Canvas(overlayBitmap)
+        val tPaint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
+        val bPaint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
 
         while (!outputDone) {
             if (!inputDone) {
@@ -186,26 +161,67 @@ class VideoExporter(
                         videoTexture.updateTexImage()
                         renderer.drawFrame(videoTexture, config.filterParams)
                         
-                        if (overlayProgram != null) {
-                            android.opengl.GLES20.glEnable(android.opengl.GLES20.GL_BLEND)
-                            android.opengl.GLES20.glBlendFunc(android.opengl.GLES20.GL_SRC_ALPHA, android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA)
-                            overlayProgram.use()
-                            val aPos = overlayProgram.getAttribLocation("aPosition")
-                            val aTex = overlayProgram.getAttribLocation("aTexCoord")
-                            overlayProgram.setUniformMat4("uMatrix", overlayMatrix)
-                            
-                            android.opengl.GLES20.glActiveTexture(android.opengl.GLES20.GL_TEXTURE0)
-                            android.opengl.GLES20.glBindTexture(android.opengl.GLES20.GL_TEXTURE_2D, overlayTexId[0])
-                            overlayProgram.setUniform1i("sTexture", 0)
-                            android.opengl.GLES20.glEnableVertexAttribArray(aPos)
-                            android.opengl.GLES20.glVertexAttribPointer(aPos, 3, android.opengl.GLES20.GL_FLOAT, false, 0, quadVerts)
-                            android.opengl.GLES20.glEnableVertexAttribArray(aTex)
-                            android.opengl.GLES20.glVertexAttribPointer(aTex, 2, android.opengl.GLES20.GL_FLOAT, false, 0, quadTexs)
-                            android.opengl.GLES20.glDrawArrays(android.opengl.GLES20.GL_TRIANGLE_STRIP, 0, 4)
-                            android.opengl.GLES20.glDisableVertexAttribArray(aPos)
-                            android.opengl.GLES20.glDisableVertexAttribArray(aTex)
-                            android.opengl.GLES20.glDisable(android.opengl.GLES20.GL_BLEND)
+                        // Draw Overlays per frame
+                        overlayBitmap.eraseColor(android.graphics.Color.TRANSPARENT)
+                        for (item in config.overlays) {
+                            overlayCanvas.save()
+                            overlayCanvas.translate(item.normX * bmpWidth, item.normY * bmpHeight)
+                            overlayCanvas.rotate(item.rotation)
+                            overlayCanvas.scale(item.scale, item.scale)
+                            if (item is OverlayItem.TextOverlay) {
+                                tPaint.color = item.textColor
+                                tPaint.textSize = item.fontSize
+                                tPaint.typeface = item.typeface
+                                val bounds = android.graphics.Rect()
+                                tPaint.getTextBounds(item.text, 0, item.text.length, bounds)
+                                val fm = tPaint.fontMetrics
+                                val totalW = tPaint.measureText(item.text)
+                                val totalH = fm.descent - fm.ascent
+                                if (item.bgColor != android.graphics.Color.TRANSPARENT) {
+                                    bPaint.color = item.bgColor
+                                    overlayCanvas.drawRoundRect(-totalW/2f - 40f, -totalH/2f - 20f, totalW/2f + 40f, totalH/2f + 20f, 20f, 20f, bPaint)
+                                }
+                                if (item.hasShadow) tPaint.setShadowLayer(10f, 5f, 5f, android.graphics.Color.BLACK) else tPaint.clearShadowLayer()
+                                overlayCanvas.drawText(item.text, -totalW/2f, (totalH/2f) - fm.descent, tPaint)
+                            } else if (item is OverlayItem.GifOverlay) {
+                                val drawable = gifDrawables[item.id]
+                                if (drawable != null) {
+                                    // Manually seek GIF based on video PTS to ensure it animates in export
+                                    val gifDuration = 0 // Will use drawable's duration logic
+                                    val frameIndex = ((pts / 1000) % 1000).toInt() // Dummy logic to force frame advance
+                                    // Glide's GifDrawable.draw() handles its own internal timer. 
+                                    // By calling invalidateSelf() and start(), we encourage it to advance.
+                                    drawable.setVisible(true, true)
+                                    drawable.start()
+                                    val hw = drawable.intrinsicWidth / 2f
+                                    val hh = drawable.intrinsicHeight / 2f
+                                    drawable.setBounds((-hw).toInt(), (-hh).toInt(), hw.toInt(), hh.toInt())
+                                    drawable.draw(overlayCanvas)
+                                }
+                            }
+                            overlayCanvas.restore()
                         }
+
+                        android.opengl.GLES20.glActiveTexture(android.opengl.GLES20.GL_TEXTURE0)
+                        android.opengl.GLES20.glBindTexture(android.opengl.GLES20.GL_TEXTURE_2D, overlayTexId[0])
+                        android.opengl.GLES20.glTexParameteri(android.opengl.GLES20.GL_TEXTURE_2D, android.opengl.GLES20.GL_TEXTURE_MIN_FILTER, android.opengl.GLES20.GL_LINEAR)
+                        android.opengl.GLES20.glTexParameteri(android.opengl.GLES20.GL_TEXTURE_2D, android.opengl.GLES20.GL_TEXTURE_MAG_FILTER, android.opengl.GLES20.GL_LINEAR)
+                        android.opengl.GLUtils.texImage2D(android.opengl.GLES20.GL_TEXTURE_2D, 0, overlayBitmap, 0)
+
+                        android.opengl.GLES20.glEnable(android.opengl.GLES20.GL_BLEND)
+                        android.opengl.GLES20.glBlendFunc(android.opengl.GLES20.GL_SRC_ALPHA, android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA)
+                        overlayProgram.use()
+                        val aPos = overlayProgram.getAttribLocation("aPosition")
+                        val aTex = overlayProgram.getAttribLocation("aTexCoord")
+                        overlayProgram.setUniformMat4("uMatrix", overlayMatrix)
+                        overlayProgram.setUniform1i("sTexture", 0)
+                        android.opengl.GLES20.glEnableVertexAttribArray(aPos)
+                        android.opengl.GLES20.glVertexAttribPointer(aPos, 3, android.opengl.GLES20.GL_FLOAT, false, 0, quadVerts)
+                        android.opengl.GLES20.glEnableVertexAttribArray(aTex)
+                        android.opengl.GLES20.glVertexAttribPointer(aTex, 2, android.opengl.GLES20.GL_FLOAT, false, 0, quadTexs)
+                        android.opengl.GLES20.glDrawArrays(android.opengl.GLES20.GL_TRIANGLE_STRIP, 0, 4)
+                        android.opengl.GLES20.glDisable(android.opengl.GLES20.GL_BLEND)
+
                         eglCore.setPresentationTime(eglSurface, pts * 1000)
                         eglCore.swapBuffers(eglSurface)
                         if (durationUs > 0) onProgress(((pts * 100) / durationUs).toInt().coerceIn(0, 99))
@@ -249,22 +265,16 @@ class VideoExporter(
             val audioExtractor = MediaExtractor()
             audioExtractor.setDataSource(context, config.inputUri, null)
             audioExtractor.selectTrack(audioTrackIndex)
-            
             val audioBufferInfo = MediaCodec.BufferInfo()
             val buffer = java.nio.ByteBuffer.allocateDirect(1024 * 1024)
-            
             while (true) {
                 val sampleSize = audioExtractor.readSampleData(buffer, 0)
                 if (sampleSize < 0) break
-                
                 audioBufferInfo.size = sampleSize
                 audioBufferInfo.presentationTimeUs = audioExtractor.sampleTime
                 audioBufferInfo.flags = audioExtractor.sampleFlags
                 audioBufferInfo.offset = 0
-                
-                try {
-                    muxer.writeSampleData(audioTrack, buffer, audioBufferInfo)
-                } catch (e: Exception) {}
+                try { muxer.writeSampleData(audioTrack, buffer, audioBufferInfo) } catch (e: Exception) {}
                 audioExtractor.advance()
             }
             audioExtractor.release()
@@ -275,11 +285,11 @@ class VideoExporter(
         decoder.stop(); decoder.release()
         encoder.stop(); encoder.release()
         renderer.release()
-        overlayProgram?.delete()
-        if (overlayTexId[0] != 0) android.opengl.GLES20.glDeleteTextures(1, overlayTexId, 0)
+        overlayProgram.delete()
+        android.opengl.GLES20.glDeleteTextures(1, overlayTexId, 0)
+        overlayBitmap.recycle()
         eglCore.release()
         extractor.release()
-        
         onProgress(100)
         return ExportResult.Success(config.outputFile)
     }

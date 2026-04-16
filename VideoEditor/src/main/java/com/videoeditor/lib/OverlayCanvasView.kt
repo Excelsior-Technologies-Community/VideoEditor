@@ -3,10 +3,15 @@ package com.videoeditor.lib
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.videoeditor.lib.overlay.OverlayItem
 import kotlin.math.*
 
@@ -15,6 +20,7 @@ class OverlayCanvasView @JvmOverloads constructor(
 ) : View(context, attrs) {
 
     private val overlays = mutableListOf<OverlayItem>()
+    private val gifDrawables = mutableMapOf<String, GifDrawable>()
     private var selectedId: String? = null
     var onOverlaySelected: ((OverlayItem?) -> Unit)? = null
 
@@ -57,12 +63,37 @@ class OverlayCanvasView @JvmOverloads constructor(
     fun addOverlay(item: OverlayItem) {
         overlays.add(item)
         selectedId = item.id
+        if (item is OverlayItem.GifOverlay) {
+            loadGifDrawable(item)
+        }
         invalidate()
         onOverlaySelected?.invoke(item)
     }
 
+    private fun loadGifDrawable(item: OverlayItem.GifOverlay) {
+        Glide.with(context)
+            .asGif()
+            .load(item.gifBytes)
+            .into(object : CustomTarget<GifDrawable>() {
+                override fun onResourceReady(resource: GifDrawable, transition: Transition<in GifDrawable>?) {
+                    resource.callback = object : Drawable.Callback {
+                        override fun invalidateDrawable(who: Drawable) { invalidate() }
+                        override fun scheduleDrawable(who: Drawable, what: Runnable, `when`: Long) { postDelayed(what, `when`) }
+                        override fun unscheduleDrawable(who: Drawable, what: Runnable) { removeCallbacks(what) }
+                    }
+                    resource.start()
+                    gifDrawables[item.id] = resource
+                    invalidate()
+                }
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    gifDrawables.remove(item.id)
+                }
+            })
+    }
+
     fun removeOverlay(id: String) {
         overlays.removeAll { it.id == id }
+        gifDrawables.remove(id)?.stop()
         if (selectedId == id) { selectedId = null; onOverlaySelected?.invoke(null) }
         invalidate()
     }
@@ -83,7 +114,7 @@ class OverlayCanvasView @JvmOverloads constructor(
 
             when (item) {
                 is OverlayItem.TextOverlay  -> drawText(canvas, item)
-                is OverlayItem.StickerOverlay -> drawSticker(canvas, item)
+                is OverlayItem.GifOverlay -> drawGif(canvas, item)
             }
 
             if (item.id == selectedId) {
@@ -99,11 +130,7 @@ class OverlayCanvasView @JvmOverloads constructor(
             color = item.textColor
             textSize = item.fontSize
             typeface = item.typeface
-            if (item.bold && typeface != Typeface.DEFAULT_BOLD) {
-                isFakeBoldText = true
-            } else {
-                isFakeBoldText = false
-            }
+            isFakeBoldText = item.bold && typeface != Typeface.DEFAULT_BOLD
             textAlign = Paint.Align.LEFT
         }
 
@@ -112,80 +139,49 @@ class OverlayCanvasView @JvmOverloads constructor(
         val fm = textPaint.fontMetrics
         val advanceWidth = textPaint.measureText(item.text)
 
-        val contentLeft = min(0f, bounds.left.toFloat())
-        val contentRight = max(advanceWidth, bounds.right.toFloat())
-        val totalWidth = contentRight - contentLeft
-        val totalHeight = fm.descent - fm.ascent
-
-        val contentCenterX = (contentLeft + contentRight) / 2f
+        val contentCenterX = (min(0f, bounds.left.toFloat()) + max(advanceWidth, bounds.right.toFloat())) / 2f
         val contentCenterY = (fm.ascent + fm.descent) / 2f
-
-        val drawX = -contentCenterX
-        val drawY = -contentCenterY
-
-        val hPad = 100f
-        val topPad = 50f
-        val bottomPad = 100f
 
         if (item.bgColor != Color.TRANSPARENT) {
             bgPaint.color = item.bgColor
-            val bgRect = RectF(
-                -totalWidth / 2f - hPad,
-                -totalHeight / 2f - topPad,
-                totalWidth / 2f + hPad,
-                totalHeight / 2f + bottomPad
-            )
-            canvas.drawRoundRect(bgRect, 40f, 40f, bgPaint)
+            val totalWidth = max(advanceWidth, bounds.right.toFloat()) - min(0f, bounds.left.toFloat())
+            val totalHeight = fm.descent - fm.ascent
+            val bgRect = RectF(-totalWidth/2f - 40f, -totalHeight/2f - 20f, totalWidth/2f + 40f, totalHeight/2f + 20f)
+            canvas.drawRoundRect(bgRect, 20f, 20f, bgPaint)
         }
 
         if (item.hasShadow) textPaint.setShadowLayer(10f, 5f, 5f, Color.BLACK)
         else textPaint.clearShadowLayer()
 
-        canvas.drawText(item.text, drawX, drawY, textPaint)
+        canvas.drawText(item.text, -contentCenterX, -contentCenterY, textPaint)
     }
 
-    private fun drawSticker(canvas: Canvas, item: OverlayItem.StickerOverlay) {
-        val hw = item.bitmap.width / 2f
-        val hh = item.bitmap.height / 2f
-        canvas.drawBitmap(item.bitmap, -hw, -hh, null)
+    private fun drawGif(canvas: Canvas, item: OverlayItem.GifOverlay) {
+        val drawable = gifDrawables[item.id]
+        if (drawable != null) {
+            val hw = drawable.intrinsicWidth / 2f
+            val hh = drawable.intrinsicHeight / 2f
+            drawable.setBounds((-hw).toInt(), (-hh).toInt(), hw.toInt(), hh.toInt())
+            drawable.draw(canvas)
+        }
     }
 
     private fun getLocalBounds(item: OverlayItem): RectF {
         return when (item) {
             is OverlayItem.TextOverlay -> {
-                textPaint.apply {
-                    textSize = item.fontSize
-                    typeface = item.typeface
-                }
+                textPaint.apply { textSize = item.fontSize; typeface = item.typeface }
                 val bounds = Rect()
                 textPaint.getTextBounds(item.text, 0, item.text.length, bounds)
                 val fm = textPaint.fontMetrics
-                val advanceWidth = textPaint.measureText(item.text)
-
-                val contentLeft = min(0f, bounds.left.toFloat())
-                val contentRight = max(advanceWidth, bounds.right.toFloat())
-                val totalWidth = contentRight - contentLeft
+                val totalWidth = max(textPaint.measureText(item.text), bounds.right.toFloat()) - min(0f, bounds.left.toFloat())
                 val totalHeight = fm.descent - fm.ascent
-
-                val hPad = 100f
-                val topPad = 50f
-                val bottomPad = 100f
-
-                RectF(
-                    -totalWidth / 2f - hPad,
-                    -totalHeight / 2f - topPad,
-                    totalWidth / 2f + hPad,
-                    totalHeight / 2f + bottomPad
-                )
+                RectF(-totalWidth/2f - 40f, -totalHeight/2f - 20f, totalWidth/2f + 40f, totalHeight/2f + 20f)
             }
-
-            is OverlayItem.StickerOverlay -> {
-                RectF(
-                    -item.bitmap.width / 2f,
-                    -item.bitmap.height / 2f,
-                    item.bitmap.width / 2f,
-                    item.bitmap.height / 2f
-                )
+            is OverlayItem.GifOverlay -> {
+                val drawable = gifDrawables[item.id]
+                val w = drawable?.intrinsicWidth ?: 100
+                val h = drawable?.intrinsicHeight ?: 100
+                RectF(-w/2f, -h/2f, w/2f, h/2f)
             }
         }
     }
@@ -237,10 +233,11 @@ class OverlayCanvasView @JvmOverloads constructor(
         return overlays.asReversed().firstOrNull { item ->
             val cx = item.normX * width
             val cy = item.normY * height
-            val matrix = Matrix()
-            matrix.setTranslate(cx, cy)
-            matrix.preRotate(item.rotation)
-            matrix.preScale(item.scale, item.scale)
+            val matrix = Matrix().apply {
+                setTranslate(cx, cy)
+                preRotate(item.rotation)
+                preScale(item.scale, item.scale)
+            }
             val invMatrix = Matrix()
             matrix.invert(invMatrix)
             val pts = floatArrayOf(x, y)
