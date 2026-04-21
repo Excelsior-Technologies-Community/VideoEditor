@@ -21,7 +21,7 @@ Add the dependency in your app's `build.gradle`:
 
 ```gradle
 dependencies {
-    implementation("com.github.Excelsior-Technologies-Community:VideoEditor:1.3")
+    implementation("com.github.Excelsior-Technologies-Community:VideoEditor:1.4")
 }
 ```
 
